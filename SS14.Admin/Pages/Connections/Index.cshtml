@@ -2,54 +2,55 @@
 @using SS14.Admin.Pages.Tables
 @using SS14.Admin.Helpers
 @model SS14.Admin.Pages.Connections.ConnectionsIndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Connection log";
+    ViewData["Title"] = Localizer["Connection log"];
 }
 
 <form asp-page="./Index" asp-all-route-data="@Model.AllRouteData.ShallowClone()" method="get" class="container mb-3">
     @FormHiddenRoutes.Make(Model.AllRouteData, "search", "showAccepted", "showBanned", "showWhitelist", "showFull", "showPanic")
     <div class="form-group row">
-        <label class="col-md-3" for="searchBar">Search:</label>
+        <label class="col-md-3" for="searchBar">@Localizer["Search:"]</label>
         <div class="col-md-7">
             <input type="text" id="searchBar" name="search" value="@Model.CurrentFilter" class="form-control form-control-sm"/>
         </div>
-        <input type="submit" value="Search" class="btn btn-primary col-md-1 btn-sm"/>
-        <a class="btn btn-danger btn-sm col-md-1" asp-page="./Index">Clear</a>
+        <input type="submit" value="@(Localizer["Search"])" class="btn btn-primary col-md-1 btn-sm"/>
+        <a class="btn btn-danger btn-sm col-md-1" asp-page="./Index">@Localizer["Clear"]</a>
     </div>
     <div class="form-group row">
-        <span class="col-md-2 col-form-label">Show:</span>
+        <span class="col-md-2 col-form-label">@Localizer["Show:"]</span>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showAccepted" name="showAccepted" @(Model.ShowAccepted ? "checked" : "") value="true">
-            <label class="form-check-label" for="showAccepted">Accepted</label>
+            <label class="form-check-label" for="showAccepted">@Localizer["Accepted"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showBanned" name="showBanned" @(Model.ShowBanned ? "checked" : "") value="true">
-            <label class="form-check-label" for="showBanned">Banned</label>
+            <label class="form-check-label" for="showBanned">@Localizer["Banned"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showWhitelist" name="showWhitelist" @(Model.ShowWhitelist ? "checked" : "") value="true">
-            <label class="form-check-label" for="showWhitelist">Whitelist</label>
+            <label class="form-check-label" for="showWhitelist">@Localizer["Whitelist"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showFull" name="showFull" @(Model.ShowFull ? "checked" : "") value="true">
-            <label class="form-check-label" for="showFull">Server Full</label>
+            <label class="form-check-label" for="showFull">@Localizer["Server Full"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showPanic" name="showPanic" @(Model.ShowPanic ? "checked" : "") value="true">
-            <label class="form-check-label" for="showPanic">Panic Bunker</label>
+            <label class="form-check-label" for="showPanic">@Localizer["Panic Bunker"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showBabyJail" name="showBabyJail" @(Model.ShowBabyJail ? "checked" : "") value="true">
-            <label class="form-check-label" for="showBabyJail">Baby Jail</label>
+            <label class="form-check-label" for="showBabyJail">@Localizer["Baby Jail"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showIPChecks" name="showIPChecks" @(Model.ShowIPChecks ? "checked" : "") value="true">
-            <label class="form-check-label" for="showIPChecks">IP Checks</label>
+            <label class="form-check-label" for="showIPChecks">@Localizer["IP Checks"]</label>
         </div>
         <div class="form-check col">
             <input type="checkbox" class="form-check-input" id="showNoHwId" name="showNoHwId" @(Model.ShowNoHwid ? "checked" : "") value="true">
-            <label class="form-check-label" for="showNoHwId">No HWID</label>
+            <label class="form-check-label" for="showNoHwId">@Localizer["No HWID"]</label>
         </div>
     </div>
 </form>

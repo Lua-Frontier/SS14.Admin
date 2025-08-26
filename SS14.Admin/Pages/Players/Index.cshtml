@@ -2,20 +2,21 @@
 @using SS14.Admin.Pages.Tables
 @using SS14.Admin.Helpers
 @model SS14.Admin.Pages.Players.PlayersIndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Players";
+    ViewData["Title"] = Localizer["Players"];
 }
 
 <form asp-page="./Index" method="get" class="container mb-3">
     @FormHiddenRoutes.Make(Model.AllRouteData, "search")
     <div class="form-group row">
-        <label class="col-md-3" for="searchBar">Search name, ID or IP:</label>
+        <label class="col-md-3" for="searchBar">@Localizer["Search name, ID or IP:"]</label>
         <div class="col-md-7">
             <input type="text" id="searchBar" name="search" value="@Model.CurrentFilter" class="form-control form-control-sm"/>
         </div>
-        <input type="submit" value="Search" class="btn btn-primary col-md-1 btn-sm"/>
-        <a class="btn btn-danger btn-sm col-md-1" asp-page="./Index">Clear</a>
+        <input type="submit" value="@(Localizer["Search"])" class="btn btn-primary col-md-1 btn-sm"/>
+        <a class="btn btn-danger btn-sm col-md-1" asp-page="./Index">@Localizer["Clear"]</a>
     </div>
 </form>
 
@@ -24,12 +25,12 @@
 <table class="table table-striped mt-3">
     <thead>
     <tr>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "name", "Last Name"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "uid", "User ID"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "last_seen_time", "Last seen time"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "last_seen_addr", "Last seen address"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "last_seen_hwid", "Last seen HWID"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "first_seen", "First seen"))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "name", Localizer["Last Name"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "uid", Localizer["User ID"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "last_seen_time", Localizer["Last seen time"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "last_seen_addr", Localizer["Last seen address"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "last_seen_hwid", Localizer["Last seen HWID"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "first_seen", Localizer["First seen"].Value))"/>
         <th></th>
     </tr>
     </thead>
@@ -50,12 +51,12 @@
             }
             else
             {
-                <td class="font-monospace constrained-150">Hidden</td>
-                <td class="font-monospace constrained-150">Hidden</td>
+                <td class="font-monospace constrained-150">@Localizer["Hidden"]</td>
+                <td class="font-monospace constrained-150">@Localizer["Hidden"]</td>
             }
             <td>@player.FirstSeenTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
             <td>
-                <a asp-page="/Players/Info" asp-route-userId="@player.UserId" class="btn btn-secondary">Player Info</a>
+                <a asp-page="/Players/Info" asp-route-userId="@player.UserId" class="btn btn-secondary">@Localizer["Player Info"]</a>
             </td>
         </tr>
     }

@@ -27,4 +27,6 @@
     <ProjectReference Include="..\SS14\Content.Server.Database\Content.Server.Database.csproj" />
   </ItemGroup>
 
+  <!-- Remove explicit resx inclusion; SDK includes Resources/** by default -->
+
 </Project>

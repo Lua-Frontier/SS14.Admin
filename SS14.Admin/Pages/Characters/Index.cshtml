@@ -5,19 +5,20 @@
 @using Content.Server.Database
 @model SS14.Admin.Pages.Characters.CharactersIndexModel
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Characters";
+    ViewData["Title"] = Localizer["Characters"];
 }
 
 <form asp-page="./Index" method="get" class="container mb-3">
     @FormHiddenRoutes.Make(Model.AllRouteData, "search")
     <div class="form-group row">
-        <label class="col-md-3" for="searchBar">Search character name:</label>
+        <label class="col-md-3" for="searchBar">@Localizer["Search character name:"]</label>
         <div class="col-md-7">
             <input type="text" id="searchBar" name="search" value="@Model.CurrentFilter" class="form-control form-control-sm"/>
         </div>
-        <input type="submit" value="Search" class="btn btn-primary col-md-1 btn-sm"/>
-        <a class="btn btn-danger btn-sm col-md-1" asp-page="./Index">Clear</a>
+        <input type="submit" value="@(Localizer["Search"])" class="btn btn-primary col-md-1 btn-sm"/>
+        <a class="btn btn-danger btn-sm col-md-1" asp-page="./Index">@Localizer["Clear"]</a>
     </div>
 </form>
 
@@ -26,13 +27,13 @@
 <table class="table table-striped mt-3">
     <thead>
     <tr>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "player_name", "Player"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "character_name", "Character Name"))"/>
-        <th>Age</th>
-        <th>Sex</th>
-        <th>Gender</th>
-        <th>Species</th>
-        <th>Favorite job</th>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "player_name", Localizer["Player"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "character_name", Localizer["Character Name"].Value))"/>
+        <th>@Localizer["Age"]</th>
+        <th>@Localizer["Sex"]</th>
+        <th>@Localizer["Gender"]</th>
+        <th>@Localizer["Species"]</th>
+        <th>@Localizer["Favorite job"]</th>
     </tr>
     </thead>
     <tbody>
@@ -57,7 +58,7 @@
             <td>@profile.Gender</td>
             <td>@profile.Species</td>
             @{ var favJob = profile.Jobs.SingleOrDefault(e => e.Priority == DbJobPriority.High); }
-            <td>@(favJob == null ? "none" : favJob.JobName)</td>
+            <td>@(favJob == null ? Localizer["none"].Value : favJob.JobName)</td>
         </tr>
     }
     </tbody>

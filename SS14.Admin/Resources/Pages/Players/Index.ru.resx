@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Players" xml:space="preserve"><value>Игроки</value></data>
+  <data name="Search name, ID or IP:" xml:space="preserve"><value>Поиск по имени, ID или IP:</value></data>
+  <data name="Search" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Clear" xml:space="preserve"><value>Сброс</value></data>
+  <data name="Last Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="User ID" xml:space="preserve"><value>ID пользователя</value></data>
+  <data name="Last seen time" xml:space="preserve"><value>Последний вход</value></data>
+  <data name="Last seen address" xml:space="preserve"><value>Последний адрес</value></data>
+  <data name="Last seen HWID" xml:space="preserve"><value>Последний HWID</value></data>
+  <data name="First seen" xml:space="preserve"><value>Первый вход</value></data>
+  <data name="Hidden" xml:space="preserve"><value>Скрыто</value></data>
+  <data name="Player Info" xml:space="preserve"><value>Инфо игрока</value></data>
+</root>
+
+

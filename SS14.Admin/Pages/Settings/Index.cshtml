@@ -8,10 +8,12 @@
     var textClass = darkMode ? "text-light" : "text-dark";
 }
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 @* TODO: Make this actually look good*@
 <div class="container">
-    <h1>Settings</h1>
-    <button type="button" class="btn btn-primary" onclick="toggleDarkMode()">Toggle darkmode</button>
+    <h1>@Localizer["Settings"]</h1>
+    <button type="button" class="btn btn-primary" onclick="toggleDarkMode()">@Localizer["Toggle darkmode"]</button>
 </div>
 
 <script src="~/js/settings.js" asp-append-version="true"></script>

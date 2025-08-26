@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Ban Hits" xml:space="preserve"><value>Попадания в бан</value></data>
+  <data name="Ban hits for ban" xml:space="preserve"><value>Попадания для бана</value></data>
+  <data name="Name:" xml:space="preserve"><value>Имя:</value></data>
+  <data name="User ID:" xml:space="preserve"><value>ID пользователя:</value></data>
+  <data name="IP:" xml:space="preserve"><value>IP:</value></data>
+  <data name="HWID:" xml:space="preserve"><value>HWID:</value></data>
+  <data name="Time:" xml:space="preserve"><value>Время:</value></data>
+  <data name="Expires:" xml:space="preserve"><value>Истекает:</value></data>
+  <data name="Unbanned:" xml:space="preserve"><value>Разбанен:</value></data>
+  <data name="by" xml:space="preserve"><value>пользователем</value></data>
+  <data name="Expired" xml:space="preserve"><value>Истёк</value></data>
+  <data name="Banning admin:" xml:space="preserve"><value>Админ, выдавший бан:</value></data>
+  <data name="Actions:" xml:space="preserve"><value>Действия:</value></data>
+  <data name="Unban" xml:space="preserve"><value>Разбанить</value></data>
+  <data name="Search:" xml:space="preserve"><value>Поиск:</value></data>
+  <data name="Search" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Clear" xml:space="preserve"><value>Сброс</value></data>
+</root>
+
+

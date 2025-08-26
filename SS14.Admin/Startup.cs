@@ -1,7 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Globalization;
 using System.Net;
 using Content.Server.Database;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Serilog;
@@ -34,6 +36,9 @@ namespace SS14.Admin
 
             services.AddDbContext<PostgresServerDbContext>(options => options.UseNpgsql(connStr));
 
+            // Localization
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
             services.AddControllers();
             services.AddRazorPages(options =>
             {
@@ -44,7 +49,9 @@ namespace SS14.Admin
                 options.Conventions.AuthorizeFolder("/Logs");
                 options.Conventions.AuthorizeFolder("/Characters");
                 options.Conventions.AuthorizeFolder("/Whitelist");
-            });
+            })
+            .AddViewLocalization()
+            .AddDataAnnotationsLocalization();
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -94,6 +101,14 @@ namespace SS14.Admin
                 app.UseHsts();
             }
 
+            // Supported cultures
+            var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("ru") };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture("en")
+                .AddSupportedCultures("en", "ru")
+                .AddSupportedUICultures("en", "ru");
+            localizationOptions.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+
             var forwardedHeadersOptions = new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
@@ -105,6 +120,8 @@ namespace SS14.Admin
             }
 
             app.UseForwardedHeaders(forwardedHeadersOptions);
+
+            app.UseRequestLocalization(localizationOptions);
 
             var pathBase = Configuration.GetValue<string>("PathBase");
             if (!string.IsNullOrEmpty(pathBase))

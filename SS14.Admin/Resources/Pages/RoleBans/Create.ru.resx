@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Create new role ban" xml:space="preserve"><value>Создать бан роли</value></data>
+  <data name="Name or user ID" xml:space="preserve"><value>Имя или ID пользователя</value></data>
+  <data name="IP address/CIDR" xml:space="preserve"><value>IP адрес/CIDR</value></data>
+  <data name="Find last Info" xml:space="preserve"><value>Найти последние данные</value></data>
+  <data name="HWID" xml:space="preserve"><value>HWID</value></data>
+  <data name="Minutes (0: permanent)" xml:space="preserve"><value>Минут (0: перманентно)</value></data>
+  <data name="Role" xml:space="preserve"><value>Роль</value></data>
+  <data name="Get the syntax right, there's no validation" xml:space="preserve"><value>Точное имя роли, валидации нет</value></data>
+  <data name="Reason" xml:space="preserve"><value>Причина</value></data>
+  <data name="Create" xml:space="preserve"><value>Создать</value></data>
+</root>
+
+

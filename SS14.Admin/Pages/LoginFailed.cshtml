@@ -5,6 +5,8 @@
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Failed to log in</h1>
-<h2 class="text-danger">You are not a server administrator</h2>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+<h1 class="text-danger">@Localizer["Failed to log in"]</h1>
+<h2 class="text-danger">@Localizer["You are not a server administrator"]</h2>
 

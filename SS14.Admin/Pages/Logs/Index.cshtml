@@ -4,8 +4,9 @@
 @using SS14.Admin.Helpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Admin Logs";
+    ViewData["Title"] = Localizer["Admin Logs"];
     var prevDisabled = Model.PageIndex == 0 ? "disabled" : "";
     var nextDisabled = (Model.Items.Count == 0) ? "disabled" : "";
     var nextPageIdx = Model.PageIndex + 1;
@@ -19,33 +20,33 @@
     <data-grid-filter class="flex-row">
         <div class="form-group" style="display: inline-block; align-items: center;">
             <div style="display: inline-block">
-                <label for="datePicker">Date Range:<button id="litepicker-close" class="btn btn-sm"><i class="fas fa-times"></i></button></label>
-                <input class="form-control" name="daterange" id="datePicker" type="text" value="@(Model.FromDate)" placeholder="Date from - to"/>
+                <label for="datePicker">@Localizer["Date Range"]:<button id="litepicker-close" class="btn btn-sm"><i class="fas fa-times"></i></button></label>
+                <input class="form-control" name="daterange" id="datePicker" type="text" value="@(Model.FromDate)" placeholder="@(Localizer["Date from - to"])"/>
             </div>
         </div>
         <div class="form-group">
-            <label for="search">Text Search</label>
-            <input name="search" class="form-control" id="search" type="text" placeholder="Search"/>
+            <label for="search">@Localizer["Text Search"]</label>
+            <input name="search" class="form-control" id="search" type="text" placeholder="@(Localizer["Search"])"/>
         </div>
         <div class="form-group">
-            <label for="server">Server</label>
-            <input id="server" name="server" class="form-control" type="text" placeholder="Any"/>
+            <label for="server">@Localizer["Server"]</label>
+            <input id="server" name="server" class="form-control" type="text" placeholder="@(Localizer["Any"])"/>
         </div>
         <div class="form-group">
-            <label for="roundId">Round</label>
-            <input id="roundId" name="roundId" class="form-control" type="number" placeholder="Any"/>
+            <label for="roundId">@Localizer["Round"]</label>
+            <input id="roundId" name="roundId" class="form-control" type="number" placeholder="@(Localizer["Any"])"/>
         </div>
         <div class="form-group">
-            <label for="player">Player</label>
-            <input id="player" name="player" class="form-control" type="text" placeholder="All Players"/>
+            <label for="player">@Localizer["Player"]</label>
+            <input id="player" name="player" class="form-control" type="text" placeholder="@(Localizer["All Players"])"/>
         </div>
         <div class="form-group" id="autocomplete-container">
-            <label for="logTypeInput">Type</label>
-            <input id="logTypeInput" name="type" class="form-control" type="text" placeholder="Any"/>
+            <label for="logTypeInput">@Localizer["Type"]</label>
+            <input id="logTypeInput" name="type" class="form-control" type="text" placeholder="@(Localizer["Any"])"/>
             <div id="autocompleteOptions"></div>
         </div>
         <div class="form-group">
-            <label for="severitySelect">Severity</label>
+            <label for="severitySelect">@Localizer["Severity"]</label>
             <select class="form-control" name="severity" id="severitySelect">
                 @foreach (var option in Model.SeverityOptions)
                 {
@@ -65,12 +66,12 @@
     <table class="results-table table table-striped table-hover">
         <thead>
         <tr>
-            <th>Round Id</th>
-            <th>Server</th>
-            <th class="text-center">Severity</th>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Message</th>
+            <th>@Localizer["Round Id"]</th>
+            <th>@Localizer["Server"]</th>
+            <th class="text-center">@Localizer["Severity"]</th>
+            <th>@Localizer["Date"]</th>
+            <th>@Localizer["Type"]</th>
+            <th>@Localizer["Message"]</th>
         </tr>
         </thead>
         <tbody id="table-body">
@@ -108,7 +109,7 @@
     @if (Model.Items.Count == 0)
     {
         <div class="flex-row flex-center">
-            <p class="m-4">No log entries found.</p>
+            <p class="m-4">@Localizer["No log entries found."]</p>
         </div>
     }
 
@@ -119,7 +120,7 @@
                asp-all-route-data="@Model.AllRouteData.ShallowClone()"
                asp-route-pageIndex="@prevPageIdx"
                class="btn btn-primary btn-sm @prevDisabled">
-                Previous
+                @Localizer["Previous"]
             </a>
             <div class="form-horizontal">
                 <select name="countselect" id="countselect" class="form-control form-control-sm" value="@Model.PerPage">
@@ -140,7 +141,7 @@
                asp-all-route-data="@Model.AllRouteData.ShallowClone()"
                asp-route-pageIndex="@nextPageIdx"
                class="btn btn-primary btn-sm @nextDisabled">
-                Next
+                @Localizer["Next"]
             </a>
         </data-grid-footer>
     }

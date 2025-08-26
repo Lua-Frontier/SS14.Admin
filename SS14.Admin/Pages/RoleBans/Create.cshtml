@@ -1,47 +1,48 @@
 ﻿@page
 @model SS14.Admin.Pages.RoleBans.Create
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Create new role ban";
+    ViewData["Title"] = Localizer["Create new role ban"];
 }
 
 <partial name="Shared/StatusMessageAlert" />
 
 <form method="post" asp-page-handler="Create" class="container">
     <div class="form-group row">
-        <label asp-for="Input.NameOrUid" class="col-sm-3 col-form-label">Name or user ID</label>
+        <label asp-for="Input.NameOrUid" class="col-sm-3 col-form-label">@Localizer["Name or user ID"]</label>
         <div class="col-sm-9">
             <input asp-for="Input.NameOrUid" class="form-control">
         </div>
     </div>
     <div class="form-group row">
-        <label asp-for="Input.IP" class="col-sm-3 col-form-label">IP address/CIDR</label>
+        <label asp-for="Input.IP" class="col-sm-3 col-form-label">@Localizer["IP address/CIDR"]</label>
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-sm">
                     <input asp-for="Input.IP" value="@Model.Input.IP" class="form-control">
                 </div>
                 <div class="col-sm-auto">
-                    <input asp-page-handler="Fill" type="submit" value="Find last Info" class="btn btn-secondary btn-block">
+                    <input asp-page-handler="Fill" type="submit" value="@(Localizer["Find last Info"])" class="btn btn-secondary btn-block">
                 </div>
             </div>
         </div>
     </div>
     <div class="form-group row">
-        <label asp-for="Input.HWid" class="col-sm-3 col-form-label">HWID</label>
+        <label asp-for="Input.HWid" class="col-sm-3 col-form-label">@Localizer["HWID"]</label>
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-sm">
                     <input asp-for="Input.HWid" value="@Model.Input.HWid" class="form-control">
                 </div>
                 <div class="col-sm-auto">
-                    <input asp-page-handler="Fill" type="submit" value="Find last Info" class="btn btn-secondary btn-block">
+                    <input asp-page-handler="Fill" type="submit" value="@(Localizer["Find last Info"])" class="btn btn-secondary btn-block">
                 </div>
             </div>
         </div>
     </div>
     <div class="form-group row">
-        <label asp-for="Input.LengthMinutes" class="col-sm-3 col-form-label">Minutes (0: permanent)</label>
+        <label asp-for="Input.LengthMinutes" class="col-sm-3 col-form-label">@Localizer["Minutes (0: permanent)"]</label>
         <div class="col-sm-9">
             <div class="row">
                 <div class="col-lg-6">
@@ -59,18 +60,19 @@
         </div>
     </div>
     <div class="form-group row">
-        <label asp-for="Input.Role" class="col-sm-3 col-form-label">Role</label>
+        <label asp-for="Input.Role" class="col-sm-3 col-form-label">@Localizer["Role"]</label>
         <div class="col-sm-9">
-            <input asp-for="Input.Role" class="form-control" placeholder="Get the syntax right, there's no validation">
+            <input asp-for="Input.Role" class="form-control" placeholder="@(Localizer["Get the syntax right, there's no validation"])"
+            >
         </div>
     </div>
     <div class="form-group row">
-        <label asp-for="Input.Reason" class="col-sm-3 col-form-label">Reason</label>
+        <label asp-for="Input.Reason" class="col-sm-3 col-form-label">@Localizer["Reason"]</label>
         <div class="col-sm-9">
             <textarea asp-for="Input.Reason" class="form-control"></textarea>
         </div>
     </div>
-    <input type="submit" asp-page-handler="Create" value="Create" class="btn btn-primary">
+    <input type="submit" asp-page-handler="Create" value="@(Localizer["Create"])" class="btn btn-primary">
 </form>
 
 

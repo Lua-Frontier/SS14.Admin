@@ -4,8 +4,9 @@
 @using SS14.Admin.Pages.Tables
 @model SS14.Admin.Pages.Whitelist.Index
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Whitelist";
+    ViewData["Title"] = Localizer["Whitelist"];
 
     var highlightWhitelist = default(Guid);
     if (TempData.TryGetValue("HighlightNewWhitelist", out var highlightObj))
@@ -17,21 +18,21 @@
 <partial name="Shared/StatusMessageAlert" />
 
 <div class="container mb-3">
-    <a class="btn btn-primary" asp-page="./AddWhitelist">Add player</a>
+    <a class="btn btn-primary" asp-page="./AddWhitelist">@Localizer["Add player"]</a>
 </div>
 
 <form asp-page="./Index" method="get" class="container mb-3">
     @FormHiddenRoutes.Make(Model.AllRouteData, "search")
     <div class="form-group row">
-        <label class="col-md-2" for="searchBar">Search name or ID:</label>
+        <label class="col-md-2" for="searchBar">@Localizer["Search name or ID:"]</label>
         <div class="col-md-8">
             <input type="text" id="searchBar" name="search" value="@Model.CurrentFilter" class="form-control form-control-sm"/>
         </div>
         <div class="col-md-1">
-            <input type="submit" value="Search" class="btn btn-primary btn-sm w-100"/>
+            <input type="submit" value="@(Localizer["Search"])" class="btn btn-primary btn-sm w-100"/>
         </div>
         <div class="col-md-1">
-            <a class="btn btn-danger btn-sm w-100" asp-page="./Index">Clear</a>
+            <a class="btn btn-danger btn-sm w-100" asp-page="./Index">@Localizer["Clear"]</a>
         </div>
     </div>
 </form>
@@ -43,9 +44,9 @@
         <thead>
         <tr>
             <th>
-                <partial name="Tables/SortTabHeaderCore" model="@(new SortTabHeaderModel(Model.SortState, "name", "Name"))"/>
+                <partial name="Tables/SortTabHeaderCore" model="@(new SortTabHeaderModel(Model.SortState, "name", Localizer["Name"].Value))"/>
                 /
-                <partial name="Tables/SortTabHeaderCore" model="@(new SortTabHeaderModel(Model.SortState, "uid", "User ID"))"/>
+                <partial name="Tables/SortTabHeaderCore" model="@(new SortTabHeaderModel(Model.SortState, "uid", Localizer["User ID"].Value))"/>
             </th>
             <th></th>
         </tr>
@@ -70,7 +71,7 @@
                     </small>
                 </td>
                 <td>
-                    <a asp-page="./RemoveWhitelist" asp-route-userId="@whitelist.UserId" class="btn btn-secondary">Remove</a>
+                    <a asp-page="./RemoveWhitelist" asp-route-userId="@whitelist.UserId" class="btn btn-secondary">@Localizer["Remove"]</a>
                 </td>
             </tr>
         }

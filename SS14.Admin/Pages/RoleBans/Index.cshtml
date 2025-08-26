@@ -2,9 +2,10 @@
 @using SS14.Admin.Pages.Tables
 @using SS14.Admin.Helpers
 @model SS14.Admin.Pages.RoleBans.Index
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Role Bans";
+    ViewData["Title"] = Localizer["Role Bans"];
     var highlightBan = 0;
     if (TempData.TryGetValue("HighlightNewBan", out var highlightObj))
     {
@@ -17,7 +18,7 @@
 <div class="container mb-3">
     @if (User.IsInRole("BAN"))
     {
-        <a class="btn btn-primary" asp-page="./Create">Create new ban</a>
+        <a class="btn btn-primary" asp-page="./Create">@Localizer["Create new ban"]</a>
     }
 </div>
 
@@ -25,7 +26,7 @@
 <form asp-page="./Index" method="get" class="container mb-3">
     @FormHiddenRoutes.Make(Model.AllRouteData, "search", "show")
     <div class="form-group row g-0">
-        <label class="col-lg-3 col-form-label" for="searchBar">Search name, ID, HWID, role, IP or admin:</label>
+        <label class="col-lg-3 col-form-label" for="searchBar">@Localizer["Search name, ID, HWID, role, IP or admin:"]</label>
         <div class="col-lg-5">
             <input type="text" id="searchBar" name="search" value="@Model.CurrentFilter" class="form-control "/>
         </div>
@@ -33,16 +34,16 @@
             <div class="row g-0">
                 <div class="col-6">
                     <select class="form-control " name="show">
-                        <option selected="@(Model.Show == Index.ShowFilter.Active)" value="">Active bans</option>
-                        <option selected="@(Model.Show == Index.ShowFilter.All)" value="all">All bans</option>
-                        <option selected="@(Model.Show == Index.ShowFilter.Expired)" value="expired">Expired/unbanned</option>
+                        <option selected="@(Model.Show == Index.ShowFilter.Active)" value="">@Localizer["Active bans"]</option>
+                        <option selected="@(Model.Show == Index.ShowFilter.All)" value="all">@Localizer["All bans"]</option>
+                        <option selected="@(Model.Show == Index.ShowFilter.Expired)" value="expired">@Localizer["Expired/unbanned"]</option>
                     </select>
                 </div>
                 <div class="col-3">
-                    <input type="submit" value="Search" class="btn btn-primary btn-block w-100"/>
+                    <input type="submit" value="@(Localizer["Search"])" class="btn btn-primary btn-block w-100"/>
                 </div>
                 <div class="col-3">
-                    <a class="btn btn-danger btn-block w-100" asp-page="./Index">Clear</a>
+                    <a class="btn btn-danger btn-block w-100" asp-page="./Index">@Localizer["Clear"]</a>
                 </div>
             </div>
         </div>

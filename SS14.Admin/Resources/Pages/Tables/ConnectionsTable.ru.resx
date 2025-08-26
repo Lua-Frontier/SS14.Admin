@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="User Name" xml:space="preserve"><value>Имя пользователя</value></data>
+  <data name="User ID" xml:space="preserve"><value>ID пользователя</value></data>
+  <data name="Time" xml:space="preserve"><value>Время</value></data>
+  <data name="IP Address" xml:space="preserve"><value>IP адрес</value></data>
+  <data name="HWID" xml:space="preserve"><value>HWID</value></data>
+  <data name="Status" xml:space="preserve"><value>Статус</value></data>
+  <data name="Server" xml:space="preserve"><value>Сервер</value></data>
+  <data name="Trust Score" xml:space="preserve"><value>Уровень доверия</value></data>
+  <data name="Bans Hit" xml:space="preserve"><value>Попаданий банов</value></data>
+  <data name="Hidden" xml:space="preserve"><value>Скрыто</value></data>
+  <data name="Denied: Banned" xml:space="preserve"><value>Отказ: Бан</value></data>
+  <data name="Denied: Whitelist" xml:space="preserve"><value>Отказ: Белый список</value></data>
+  <data name="Denied: Server Full" xml:space="preserve"><value>Отказ: Сервер полон</value></data>
+  <data name="Denied: Panic Bunker" xml:space="preserve"><value>Отказ: Panic Bunker</value></data>
+  <data name="Denied: Baby Jail" xml:space="preserve"><value>Отказ: Baby Jail</value></data>
+  <data name="Denied: IP Checks" xml:space="preserve"><value>Отказ: Проверки IP</value></data>
+  <data name="Denied: No HWID" xml:space="preserve"><value>Отказ: Нет HWID</value></data>
+  <data name="Accepted" xml:space="preserve"><value>Принято</value></data>
+  <data name="hit" xml:space="preserve"><value>хит</value></data>
+  <data name="hits" xml:space="preserve"><value>хитов</value></data>
+</root>
+
+

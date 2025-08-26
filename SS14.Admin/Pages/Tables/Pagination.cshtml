@@ -29,25 +29,26 @@
     var prevPageIdx = Model.PageIndex == 1 ? null : (int?) Model.PageIndex - 1;
 }
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 <div class="container">
     <a asp-all-route-data="@Model.AllRouteData.ShallowClone()"
        asp-route-pageIndex="@prevPageIdx"
        class="btn btn-primary btn-sm @prevDisabled">
-        Previous
+        @Localizer["Previous"]
     </a>
     <a asp-all-route-data="@Model.AllRouteData.ShallowClone()"
        asp-route-pageIndex="@nextPageIdx"
        class="btn btn-primary btn-sm @nextDisabled">
-        Next
+        @Localizer["Next"]
     </a>
 
     <span class="small">
-        Page: @(Model.PageIndex + 1)
+        @Localizer["Page:"] @(Model.PageIndex + 1)
         @if (Model.TotalCount is { } total)
         {
-            @:Total: @total
+            @:@Localizer["Total:"] @total
         }
-        Shown:
+        @Localizer["Shown:"]
         @{ await ShownCountButton(100); }
         |
         @{ await ShownCountButton(250); }

@@ -2,9 +2,10 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SS14.Admin.Helpers
 @model SS14.Admin.Pages.Bans.Create
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Create new ban";
+    ViewData["Title"] = Localizer["Create new ban"];
 }
 
 <partial name="Shared/StatusMessageAlert" />
@@ -14,13 +15,13 @@
         <h1>@ViewData["Title"]</h1>
 
         <div class="form-group row">
-            <label asp-for="Input.NameOrUid" class="col-sm-3 col-form-label">Name or user ID</label>
+            <label asp-for="Input.NameOrUid" class="col-sm-3 col-form-label">@Localizer["Name or user ID"]</label>
             <div class="col-sm-9">
                 <input asp-for="Input.NameOrUid" class="form-control">
             </div>
         </div>
         <div class="form-group row">
-            <label asp-for="Input.IP" class="col-sm-3 col-form-label">IP address/CIDR</label>
+            <label asp-for="Input.IP" class="col-sm-3 col-form-label">@Localizer["IP address/CIDR"]</label>
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-sm">
@@ -28,13 +29,13 @@
                     </div>
                     <div class="col-sm-auto align-items-center d-flex">
                         <input asp-for="Input.UseLatestIp" class="form-check-input" style="margin-right: 5px;">
-                        <label class="form-check-label">Use latest</label>
+                        <label class="form-check-label">@Localizer["Use latest"]</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group row">
-            <label asp-for="Input.HWid" class="col-sm-3 col-form-label">HWID</label>
+            <label asp-for="Input.HWid" class="col-sm-3 col-form-label">@Localizer["HWID"]</label>
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-sm">
@@ -42,13 +43,13 @@
                     </div>
                     <div class="col-sm-auto align-items-center d-flex">
                         <input asp-for="Input.UseLatestHwid" class="form-check-input" style="margin-right: 5px;">
-                        <label class="form-check-label">Use latest</label>
+                        <label class="form-check-label">@Localizer["Use latest"]</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group row">
-            <label asp-for="Input.LengthMinutes" class="col-sm-3 col-form-label">Minutes (0: permanent)</label>
+            <label asp-for="Input.LengthMinutes" class="col-sm-3 col-form-label">@Localizer["Minutes (0: permanent)"]</label>
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-lg-6">
@@ -66,14 +67,14 @@
             </div>
         </div>
         <div class="form-group row">
-            <label asp-for="Input.Reason" class="col-sm-3 col-form-label">Reason</label>
+            <label asp-for="Input.Reason" class="col-sm-3 col-form-label">@Localizer["Reason"]</label>
             <div class="col-sm-9">
                 <textarea asp-for="Input.Reason" class="form-control"></textarea>
             </div>
         </div>
 
         <div class="form-group row">
-            <label asp-for="Input.Reason" class="col-sm-3 col-form-label">Severity</label>
+            <label asp-for="Input.Reason" class="col-sm-3 col-form-label">@Localizer["Severity"]</label>
             <div class="col-sm-9">
                 <select asp-for="Input.Severity" class="form-control" asp-items="@NoteSeverityHelper.SeverityItems">
                 </select>
@@ -81,7 +82,7 @@
         </div>
 
         <div class="form-group row">
-            <legend class="col-form-label col-sm-3 float-sm-left pt-0">Settings</legend>
+            <legend class="col-form-label col-sm-3 float-sm-left pt-0">@Localizer["Settings"]</legend>
             <div class="col-sm-9 mb-3">
                 @*<div class="form-check">
                     <input asp-for="Input.AutoDelete" class="form-check-input"/>
@@ -95,7 +96,7 @@
         </div>
 
         <div class="form-group row">
-            <legend class="col-form-label col-sm-3 float-sm-left pt-0">Exemption flags</legend>
+            <legend class="col-form-label col-sm-3 float-sm-left pt-0">@Localizer["Exemption flags"]</legend>
             <div class="col-sm-9 mb-3">
                 @foreach (var (value, display) in BanExemptions.GetExemptions())
                 {
@@ -107,18 +108,18 @@
             </div>
         </div>
 
-        <input type="submit" asp-page-handler="Create" value="Create" class="btn btn-primary">
+        <input type="submit" asp-page-handler="Create" value="@(Localizer["Create"])" class="btn btn-primary">
     </div>
 
     <div class="container mt-3">
-        <h2>Ban Templates</h2>
-        <a asp-page="./BanTemplates/Create" class="btn btn-primary">Create new template</a>
+        <h2>@Localizer["Ban Templates"]</h2>
+        <a asp-page="./BanTemplates/Create" class="btn btn-primary">@Localizer["Create new template"]</a>
 
         <table class="table table-striped mt-3">
             <thead>
             <tr>
-                <th>Title</th>
-                <th>Reason</th>
+                <th>@Localizer["Title"]</th>
+                <th>@Localizer["Reason"]</th>
                 <th></th>
             </tr>
             </thead>
@@ -129,9 +130,9 @@
                 <td>@template.Title</td>
                 <td>@template.Reason</td>
                 <td>
-                    <button type="submit" asp-page-handler="UseTemplate" asp-route-templateId="@template.Id" class="btn btn-primary">Use</button>
+                    <button type="submit" asp-page-handler="UseTemplate" asp-route-templateId="@template.Id" class="btn btn-primary">@Localizer["Use"]</button>
                     <a asp-page="BanTemplates/View" asp-route-id="@template.Id" class="btn btn-secondary">
-                        Edit
+                        @Localizer["Edit"]
                     </a>
                 </td>
             </tr>

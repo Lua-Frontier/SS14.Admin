@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Characters" xml:space="preserve"><value>Персонажи</value></data>
+  <data name="Search character name:" xml:space="preserve"><value>Поиск имени персонажа:</value></data>
+  <data name="Search" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Clear" xml:space="preserve"><value>Сброс</value></data>
+  <data name="Player" xml:space="preserve"><value>Игрок</value></data>
+  <data name="Character Name" xml:space="preserve"><value>Имя персонажа</value></data>
+  <data name="Age" xml:space="preserve"><value>Возраст</value></data>
+  <data name="Sex" xml:space="preserve"><value>Пол (биол.)</value></data>
+  <data name="Gender" xml:space="preserve"><value>Гендер</value></data>
+  <data name="Species" xml:space="preserve"><value>Вид</value></data>
+  <data name="Favorite job" xml:space="preserve"><value>Любимая должность</value></data>
+  <data name="none" xml:space="preserve"><value>нет</value></data>
+</root>
+
+

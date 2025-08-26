@@ -4,12 +4,14 @@
     ViewData["Title"] = "Home page";
 }
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 <div class="container">
-    <a class="btn btn-primary" asp-page="./Bans/Index">Bans</a>
-    <a class="btn btn-primary" asp-page="./RoleBans/Index">Role bans</a>
-    <a class="btn btn-primary" asp-page="./Players/Index">Players</a>
-    <a class="btn btn-primary" asp-page="./Connections/Index">Connections</a>
-    <a class="btn btn-primary" asp-page="./Logs/Index">Logs</a>
-    <a class="btn btn-primary" asp-page="./Characters/Index">Characters</a>
-    <a class="btn btn-primary" asp-page="./Whitelist/Index">Whitelist</a>
+    <a class="btn btn-primary" asp-page="./Bans/Index">@Localizer["Bans"]</a>
+    <a class="btn btn-primary" asp-page="./RoleBans/Index">@Localizer["Role bans"]</a>
+    <a class="btn btn-primary" asp-page="./Players/Index">@Localizer["Players"]</a>
+    <a class="btn btn-primary" asp-page="./Connections/Index">@Localizer["Connections"]</a>
+    <a class="btn btn-primary" asp-page="./Logs/Index">@Localizer["Logs"]</a>
+    <a class="btn btn-primary" asp-page="./Characters/Index">@Localizer["Characters"]</a>
+    <a class="btn btn-primary" asp-page="./Whitelist/Index">@Localizer["Whitelist"]</a>
 </div>

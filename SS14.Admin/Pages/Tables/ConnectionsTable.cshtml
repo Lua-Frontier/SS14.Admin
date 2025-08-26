@@ -2,25 +2,26 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SS14.Admin.Helpers
 @model SS14.Admin.Pages.Tables.ConnectionsTableModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <partial name="Tables/Pagination" for="Pagination"/>
 
 <table class="table table-striped mt-3">
     <thead>
     <tr>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model!.SortState, "name", "User Name"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "uid", "User ID"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "time", "Time"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "addr", "IP Address"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "hwid", "HWID"))"/>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "denied", "Status"))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model!.SortState, "name", Localizer["User Name"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "uid", Localizer["User ID"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "time", Localizer["Time"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "addr", Localizer["IP Address"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "hwid", Localizer["HWID"].Value))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "denied", Localizer["Status"].Value))"/>
         <th>
-            Server
+            @Localizer["Server"]
         </th>
         <th>
-            Trust Score
+            @Localizer["Trust Score"]
         </th>
-        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "hits", "Bans Hit"))"/>
+        <partial name="Tables/SortTabHeader" model="@(new SortTabHeaderModel(Model.SortState, "hits", Localizer["Bans Hit"].Value))"/>
     </tr>
     </thead>
     <tbody>
@@ -49,35 +50,35 @@
             }
             else
             {
-                <td class="font-monospace constrained-150">Hidden</td>
-                <td class="font-monospace constrained-150">Hidden</td>
+                <td class="font-monospace constrained-150">@Localizer["Hidden"]</td>
+                <td class="font-monospace constrained-150">@Localizer["Hidden"]</td>
             }
             <td>
                 @switch (log.Denied)
                 {
                     case ConnectionDenyReason.Ban:
-                        <strong>Denied: Banned</strong>
+                        <strong>@Localizer["Denied: Banned"]</strong>
                         break;
                     case ConnectionDenyReason.Whitelist:
-                        <strong>Denied: Whitelist</strong>
+                        <strong>@Localizer["Denied: Whitelist"]</strong>
                         break;
                     case ConnectionDenyReason.Full:
-                        <strong>Denied: Server Full</strong>
+                        <strong>@Localizer["Denied: Server Full"]</strong>
                         break;
                     case ConnectionDenyReason.Panic:
-                        <strong>Denied: Panic Bunker</strong>
+                        <strong>@Localizer["Denied: Panic Bunker"]</strong>
                         break;
                     case ConnectionDenyReason.BabyJail:
-                        <strong>Denied: Baby Jail</strong>
+                        <strong>@Localizer["Denied: Baby Jail"]</strong>
                         break;
                     case ConnectionDenyReason.IPChecks:
-                        <strong>Denied: IP Checks</strong>
+                        <strong>@Localizer["Denied: IP Checks"]</strong>
                         break;
                     case ConnectionDenyReason.NoHwid:
-                        <strong>Denied: No HWID</strong>
+                        <strong>@Localizer["Denied: No HWID"]</strong>
                         break;
                     case null:
-                        <span>Accepted</span>
+                        <span>@Localizer["Accepted"]</span>
                         break;
                 }
             </td>
@@ -88,13 +89,12 @@
             <td>
                 @if (banHits != 0)
                 {
-                    <!-- In this case, "hit" is the verb. In the bans index, it's a (possibly plural) noun. -->
-                    <!-- Yes, this is VERY subtle -->
-                    <a asp-page="/Connections/Hits" class="btn btn-secondary" asp-route-connection="@log.Id">@banHits hit</a>
+                    var plural = banHits > 1;
+                    <a asp-page="/Connections/Hits" class="btn btn-secondary" asp-route-connection="@log.Id">@banHits @(plural ? Localizer["hits"] : Localizer["hit"])</a>
                 }
                 else
                 {
-                    <a href="#" class="btn btn-secondary disabled">0 hits</a>
+                    <a href="#" class="btn btn-secondary disabled">0 @Localizer["hits"]</a>
                 }
             </td>
         </tr>
