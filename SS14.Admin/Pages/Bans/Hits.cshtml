@@ -1,4 +1,4 @@
-﻿@page "{ban}"
+@page "{ban}"
 @using SS14.Admin.Helpers
 @using SS14.Admin.Pages.Tables
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -20,9 +20,9 @@
         @if (User.IsInRole(Constants.PIIRole))
         {
             <dt class="col-sm-2">@Localizer["IP:"]</dt>
-            <dd class="col-sm-10 font-monospace">@Model.Ban.Ban.Address?.FormatCidr()</dd>
+            <dd class="col-sm-10 font-monospace">@(string.Join(", ", Model.Ban.Ban.Addresses!.Select(ba => ba.Address.FormatCidr())))</dd>
             <dt class="col-sm-2">@Localizer["HWID:"]</dt>
-            <dd class="col-sm-10 font-monospace">@BanHelper.FormatHwid(Model.Ban.Ban.HWId)</dd>
+            <dd class="col-sm-10 font-monospace">@(string.Join(", ", Model.Ban.Ban.Hwids!.Select(ba => ba.HWId.ToImmutable().ToString())))</dd>
         }
         <dt class="col-sm-2">@Localizer["Time:"]</dt>
         <dd class="col-sm-10">@Model.Ban.Ban.BanTime.ToString("yyyy-MM-dd HH:mm:ss")</dd>
