@@ -101,15 +101,30 @@
             </td>
             <td>@ban.Admin</td>
             <td>
-                @if (ban.Active && User.IsInRole("BAN"))
+                @if (User.IsInRole("BAN"))
                 {
-                    <form id="unban-form-@ban.Id" asp-page="/RoleBans/Index" asp-page-handler="Unban">
-                        <input type="hidden" name="Id" value="@ban.Id">
-                        <button type="button" class="btn btn-secondary" onclick="showConfirmation('@ban.Id')">Unban</button>
-                        <div class="confirmation-button" id="confirmation-button-@ban.Id" style="display: none;">
-                            <button type="submit" class="btn btn-danger">Are you sure?</button>
-                        </div>
-                    </form>
+                    @if (ban.Active)
+                    {
+                        <form id="role-ban-action-form-@ban.Id" asp-page="/RoleBans/Index" asp-page-handler="Unban">
+                            <input type="hidden" name="Id" value="@ban.Id">
+                            <input type="hidden" name="ReturnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                            <button type="button" class="btn btn-secondary" onclick="showRoleBanActionConfirmation('@ban.Id')">Unban</button>
+                            <div class="confirmation-button" id="role-ban-action-confirmation-@ban.Id" style="display: none;">
+                                <button type="submit" class="btn btn-danger">Are you sure?</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <form id="role-ban-action-form-@ban.Id" asp-page="/RoleBans/Index" asp-page-handler="Delete">
+                            <input type="hidden" name="Id" value="@ban.Id">
+                            <input type="hidden" name="ReturnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                            <button type="button" class="btn btn-outline-danger" onclick="showRoleBanActionConfirmation('@ban.Id')">Удалить</button>
+                            <div class="confirmation-button" id="role-ban-action-confirmation-@ban.Id" style="display: none;">
+                                <button type="submit" class="btn btn-danger">Are you sure?</button>
+                            </div>
+                        </form>
+                    }
                 }
             </td>
         </tr>
@@ -118,14 +133,14 @@
 </table>
 
 <script>
-    function showConfirmation(banId) {
-        const confirmationButton = document.getElementById('confirmation-button-' + banId);
-        const unbanButton = document.getElementById('unban-form-' + banId).querySelector('button[type="button"]');
+    function showRoleBanActionConfirmation(banId) {
+        const confirmationButton = document.getElementById('role-ban-action-confirmation-' + banId);
+        const actionButton = document.getElementById('role-ban-action-form-' + banId).querySelector('button[type="button"]');
         confirmationButton.style.display = 'block';
-        unbanButton.style.display = 'none';
+        actionButton.style.display = 'none';
         setTimeout(function() {
             confirmationButton.style.display = 'none';
-            unbanButton.style.display = 'block';
+            actionButton.style.display = 'block';
         }, 3000); // Revert after 3 seconds
     }
 </script>

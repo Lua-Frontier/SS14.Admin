@@ -68,13 +68,13 @@ public class Index : PageModel
         if (ban == null)
         {
             TempData.Add("StatusMessage", "Error: Unable to find ban");
-            return RedirectToPage("./Index");
+            return RedirectAfterBanAction(model.ReturnUrl);
         }
 
         if (ban.Unban != null)
         {
             TempData.Add("StatusMessage", "Error: Already unbanned");
-            return RedirectToPage("./Index");
+            return RedirectAfterBanAction(model.ReturnUrl);
         }
 
         ban.Unban = new Unban
@@ -86,6 +86,47 @@ public class Index : PageModel
 
         await _dbContext.SaveChangesAsync();
         TempData.Add("StatusMessage", "Unban done");
+        return RedirectAfterBanAction(model.ReturnUrl);
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync([FromForm] DeleteModel model)
+    {
+        if (!User.IsInRole("BAN"))
+            return Forbid();
+
+        var ban = await _dbContext.Ban
+            .Include(b => b.Unban)
+            .Include(b => b.BanHits)
+            .Include(b => b.Players)
+            .Include(b => b.Addresses)
+            .Include(b => b.Hwids)
+            .Include(b => b.Roles)
+            .Include(b => b.Rounds)
+            .SingleOrDefaultAsync(b => b.Id == model.Id);
+
+        if (ban == null)
+        {
+            TempData.Add("StatusMessage", "Error: Unable to find ban");
+            return RedirectAfterBanAction(model.ReturnUrl);
+        }
+
+        if (BanHelper.IsBanActive(ban))
+        {
+            TempData.Add("StatusMessage", "Error: Active bans must be unbanned first");
+            return RedirectAfterBanAction(model.ReturnUrl);
+        }
+
+        _dbContext.Ban.Remove(ban);
+        await _dbContext.SaveChangesAsync();
+        TempData.Add("StatusMessage", "Ban deleted");
+        return RedirectAfterBanAction(model.ReturnUrl);
+    }
+
+    private IActionResult RedirectAfterBanAction(string? returnUrl)
+    {
+        if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+            return LocalRedirect(returnUrl);
+
         return RedirectToPage("./Index");
     }
 
@@ -166,5 +207,12 @@ public class Index : PageModel
     public sealed class UnbanModel
     {
         public int Id { get; set; }
+        public string? ReturnUrl { get; set; }
+    }
+
+    public sealed class DeleteModel
+    {
+        public int Id { get; set; }
+        public string? ReturnUrl { get; set; }
     }
 }
