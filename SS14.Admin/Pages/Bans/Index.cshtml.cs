@@ -67,13 +67,13 @@ namespace SS14.Admin.Pages
 
             if (ban == null)
             {
-                TempData.Add("StatusMessage", "Error: Unable to find ban");
+                TempData["StatusMessage"] = "Error: Unable to find ban";
                 return RedirectAfterBanAction(model.ReturnUrl);
             }
 
             if (ban.Unban != null)
             {
-                TempData.Add("StatusMessage", "Error: Already unbanned");
+                TempData["StatusMessage"] = "Error: Already unbanned";
                 return RedirectAfterBanAction(model.ReturnUrl);
             }
 
@@ -85,7 +85,7 @@ namespace SS14.Admin.Pages
             };
 
             await _dbContext.SaveChangesAsync();
-            TempData.Add("StatusMessage", "Unban done");
+            TempData["StatusMessage"] = "Unban done";
             return RedirectAfterBanAction(model.ReturnUrl);
         }
 
@@ -106,19 +106,19 @@ namespace SS14.Admin.Pages
 
             if (ban == null)
             {
-                TempData.Add("StatusMessage", "Error: Unable to find ban");
+                TempData["StatusMessage"] = "Error: Unable to find ban";
                 return RedirectAfterBanAction(model.ReturnUrl);
             }
 
             if (BanHelper.IsBanActive(ban))
             {
-                TempData.Add("StatusMessage", "Error: Active bans must be unbanned first");
+                TempData["StatusMessage"] = "Error: Active bans must be unbanned first";
                 return RedirectAfterBanAction(model.ReturnUrl);
             }
 
             _dbContext.Ban.Remove(ban);
             await _dbContext.SaveChangesAsync();
-            TempData.Add("StatusMessage", "Ban deleted");
+            TempData["StatusMessage"] = "Ban deleted";
             return RedirectAfterBanAction(model.ReturnUrl);
         }
 

@@ -151,18 +151,18 @@ public sealed class Info : PageModel
                 break;
             }
             default:
-                TempData.Add("StatusMessage", "Error: Unknown remark type");
+                TempData["StatusMessage"] = "Error: Unknown remark type";
                 return RedirectToPage(new { userId = model.UserId });
         }
 
         if (!found)
         {
-            TempData.Add("StatusMessage", "Error: Unable to find remark");
+            TempData["StatusMessage"] = "Error: Unable to find remark";
             return RedirectToPage(new { userId = model.UserId });
         }
 
         await _dbContext.SaveChangesAsync();
-        TempData.Add("StatusMessage", "Remark deleted");
+        TempData["StatusMessage"] = "Remark deleted";
         return RedirectToPage(new { userId = model.UserId });
     }
 
