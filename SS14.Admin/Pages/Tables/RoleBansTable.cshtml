@@ -107,7 +107,7 @@
                     {
                         <form id="role-ban-action-form-@ban.Id" asp-page="/RoleBans/Index" asp-page-handler="Unban">
                             <input type="hidden" name="Id" value="@ban.Id">
-                            <input type="hidden" name="ReturnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                            <input type="hidden" name="ReturnUrl" value="@($"{Context.Request.PathBase}{Context.Request.Path}{Context.Request.QueryString}")">
                             <button type="button" class="btn btn-secondary" onclick="showRoleBanActionConfirmation('@ban.Id')">Unban</button>
                             <div class="confirmation-button" id="role-ban-action-confirmation-@ban.Id" style="display: none;">
                                 <button type="submit" class="btn btn-danger">Are you sure?</button>
@@ -118,7 +118,7 @@
                     {
                         <form id="role-ban-action-form-@ban.Id" asp-page="/RoleBans/Index" asp-page-handler="Delete">
                             <input type="hidden" name="Id" value="@ban.Id">
-                            <input type="hidden" name="ReturnUrl" value="@($"{Context.Request.Path}{Context.Request.QueryString}")">
+                            <input type="hidden" name="ReturnUrl" value="@($"{Context.Request.PathBase}{Context.Request.Path}{Context.Request.QueryString}")">
                             <button type="button" class="btn btn-outline-danger" onclick="showRoleBanActionConfirmation('@ban.Id')">Удалить</button>
                             <div class="confirmation-button" id="role-ban-action-confirmation-@ban.Id" style="display: none;">
                                 <button type="submit" class="btn btn-danger">Are you sure?</button>
