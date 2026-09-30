@@ -122,11 +122,22 @@
             <th style="min-width: 130px">Expires (UTC)</th>
             <th>Created (UTC)</th>
             <th>Edited (UTC)</th>
+            @if (User.IsInRole("EDITNOTES"))
+            {
+                <th></th>
+            }
         </tr>
         </thead>
         <tbody>
         @foreach (var remark in Model.Remarks)
         {
+            var remarkType = remark switch
+            {
+                AdminMessage => SS14.Admin.Pages.Players.Info.RemarkType.Message,
+                AdminNote => SS14.Admin.Pages.Players.Info.RemarkType.Note,
+                AdminWatchlist => SS14.Admin.Pages.Players.Info.RemarkType.Watchlist,
+                _ => throw new UnreachableException()
+            };
             <tr>
                 <td>
                     @switch (remark)
@@ -235,11 +246,38 @@
                         <span class="text-secondary">No</span>
                     }
                 </td>
+                @if (User.IsInRole("EDITNOTES"))
+                {
+                    <td>
+                        <form id="remark-delete-form-@remarkType-@remark.Id" asp-page-handler="DeleteRemark" method="post">
+                            <input type="hidden" name="Id" value="@remark.Id">
+                            <input type="hidden" name="Type" value="@remarkType">
+                            <input type="hidden" name="UserId" value="@Model.Player.UserId">
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="showRemarkDeleteConfirmation('@remarkType-@remark.Id')">Удалить</button>
+                            <div id="remark-delete-confirmation-@remarkType-@remark.Id" style="display: none;">
+                                <button type="submit" class="btn btn-danger btn-sm">Are you sure?</button>
+                            </div>
+                        </form>
+                    </td>
+                }
             </tr>
         }
         </tbody>
     </table>
 </div>
+
+<script>
+    function showRemarkDeleteConfirmation(remarkKey) {
+        const confirmationButton = document.getElementById('remark-delete-confirmation-' + remarkKey);
+        const deleteButton = document.getElementById('remark-delete-form-' + remarkKey).querySelector('button[type="button"]');
+        confirmationButton.style.display = 'block';
+        deleteButton.style.display = 'none';
+        setTimeout(function() {
+            confirmationButton.style.display = 'none';
+            deleteButton.style.display = 'block';
+        }, 3000);
+    }
+</script>
 
 <div class="container-fluid">
     <h2>Bans</h2>

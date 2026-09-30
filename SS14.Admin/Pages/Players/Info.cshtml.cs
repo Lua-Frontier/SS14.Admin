@@ -8,6 +8,7 @@ using static SS14.Admin.Pages.RoleBans.Index;
 
 namespace SS14.Admin.Pages.Players;
 
+[ValidateAntiForgeryToken]
 public sealed class Info : PageModel
 {
     private readonly PostgresServerDbContext _dbContext;
@@ -97,5 +98,85 @@ public sealed class Info : PageModel
                 .Cast<IAdminRemarksCommon>()
                 .ToArrayAsync();
         }
+    }
+
+    public async Task<IActionResult> OnPostDeleteRemarkAsync([FromForm] DeleteRemarkModel model)
+    {
+        if (!User.IsInRole("EDITNOTES"))
+            return Forbid();
+
+        var deletedBy = User.Claims.GetUserId();
+        var deletedAt = DateTime.UtcNow;
+        var found = false;
+
+        switch (model.Type)
+        {
+            case RemarkType.Note:
+            {
+                var note = await _dbContext.AdminNotes.SingleOrDefaultAsync(n => n.Id == model.Id);
+                if (note is { Deleted: false })
+                {
+                    note.Deleted = true;
+                    note.DeletedById = deletedBy;
+                    note.DeletedAt = deletedAt;
+                    found = true;
+                }
+
+                break;
+            }
+            case RemarkType.Watchlist:
+            {
+                var watchlist = await _dbContext.AdminWatchlists.SingleOrDefaultAsync(n => n.Id == model.Id);
+                if (watchlist is { Deleted: false })
+                {
+                    watchlist.Deleted = true;
+                    watchlist.DeletedById = deletedBy;
+                    watchlist.DeletedAt = deletedAt;
+                    found = true;
+                }
+
+                break;
+            }
+            case RemarkType.Message:
+            {
+                var message = await _dbContext.AdminMessages.SingleOrDefaultAsync(n => n.Id == model.Id);
+                if (message is { Deleted: false })
+                {
+                    message.Deleted = true;
+                    message.DeletedById = deletedBy;
+                    message.DeletedAt = deletedAt;
+                    found = true;
+                }
+
+                break;
+            }
+            default:
+                TempData.Add("StatusMessage", "Error: Unknown remark type");
+                return RedirectToPage(new { userId = model.UserId });
+        }
+
+        if (!found)
+        {
+            TempData.Add("StatusMessage", "Error: Unable to find remark");
+            return RedirectToPage(new { userId = model.UserId });
+        }
+
+        await _dbContext.SaveChangesAsync();
+        TempData.Add("StatusMessage", "Remark deleted");
+        return RedirectToPage(new { userId = model.UserId });
+    }
+
+    public sealed class DeleteRemarkModel
+    {
+        public int Id { get; set; }
+        public RemarkType Type { get; set; }
+        public Guid UserId { get; set; }
+    }
+
+    public enum RemarkType
+    {
+        Note = 0,
+        Watchlist = 1,
+        Message = 2,
     }
 }
