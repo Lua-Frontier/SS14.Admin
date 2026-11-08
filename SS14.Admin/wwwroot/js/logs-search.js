@@ -1,6 +1,33 @@
 ﻿//Makes the calender dropdown
 const datePicker = new DatePicker('datePicker', 'litepicker-close');
 
+// Give slow log queries immediate feedback before the browser navigates.
+$(document).ready(function() {
+    const loading = document.getElementById('logs-loading');
+    let navigationPending = false;
+
+    function showLoading() {
+        if (navigationPending || !loading) return;
+        navigationPending = true;
+        loading.classList.add('is-visible');
+        loading.setAttribute('aria-hidden', 'false');
+    }
+
+    const update = context.update.bind(context);
+    context.update = function() {
+        showLoading();
+        // Let the browser paint the indicator before starting the navigation.
+        requestAnimationFrame(() => setTimeout(update, 30));
+    };
+
+    document.querySelectorAll('a[href*="pageIndex"]').forEach(link => {
+        link.addEventListener('click', event => {
+            if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+            showLoading();
+        });
+    });
+});
+
 //String search
 $(document).ready(function() {
     let x = $('#search');

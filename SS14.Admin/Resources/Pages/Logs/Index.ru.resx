@@ -17,6 +17,7 @@
   <data name="Date from - to" xml:space="preserve"><value>Дата от — до</value></data>
   <data name="Text Search" xml:space="preserve"><value>Поиск по тексту</value></data>
   <data name="Search" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Searching logs…" xml:space="preserve"><value>Ищем логи…</value></data>
   <data name="Server" xml:space="preserve"><value>Сервер</value></data>
   <data name="Any" xml:space="preserve"><value>Любое</value></data>
   <data name="Round" xml:space="preserve"><value>Раунд</value></data>

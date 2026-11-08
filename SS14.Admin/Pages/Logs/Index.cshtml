@@ -16,6 +16,11 @@
     <link href="@Url.Content("~/css/logs.css")" rel="stylesheet" type="text/css"/>
 }
 
+<div id="logs-loading" class="logs-loading" role="status" aria-live="polite" aria-hidden="true">
+    <span class="logs-loading-spinner" aria-hidden="true"></span>
+    <span>@Localizer["Searching logs…"]</span>
+</div>
+
 <data-grid>
     <data-grid-filter class="flex-row">
         <div class="form-group" style="display: inline-block; align-items: center;">

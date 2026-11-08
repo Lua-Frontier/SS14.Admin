@@ -25,7 +25,10 @@ public static class AdminLogRepository
         int limit = 100, int offset = 0)
     {
         var fromDateValue = fromDate?.ToString("o", CultureInfo.InvariantCulture);
-        var toDateValue = toDate?.AddHours(23).ToString("o", CultureInfo.InvariantCulture);
+        // Use a half-open range so the whole selected end date is included, including
+        // its final hour and fractional seconds.
+        var toDateExclusive = toDate?.Date.AddDays(1);
+        var toDateValue = toDateExclusive?.ToString("o", CultureInfo.InvariantCulture);
         var typeInt = type.HasValue ? Convert.ToInt32(type).ToString() : null;
 
         var values = new List<object>();
@@ -59,7 +62,7 @@ public static class AdminLogRepository
             INNER JOIN server AS s ON r.server_id = s.server_id
             {(playerUserId != null ? "INNER JOIN admin_log_player AS p ON p.log_id = a.admin_log_id" : "")}
             WHERE
-                {(fromDateValue != null && toDateValue != null ? "a.date BETWEEN #::timestamp with time zone AND #::timestamp with time zone AND" : "")}
+                {(fromDateValue != null && toDateValue != null ? "a.date >= #::timestamp with time zone AND a.date < #::timestamp with time zone AND" : "")}
                 {(playerUserId != null ? "p.player_user_id = # AND" : "")}
                 {(serverName != null ? "s.name = # AND" : "")}
                 {(typeInt != null ? "a.type = #::integer AND" : "")}

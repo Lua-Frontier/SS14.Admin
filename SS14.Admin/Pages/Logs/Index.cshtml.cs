@@ -66,7 +66,25 @@ public class LogsIndexModel : PageModel
             //Converts "any" to null in order to correctly use FindAdminLogs()
             SeveritySearch = severity != -2 ? severity : null;
 
-            var playerUserId = AdminLogRepository.FindPlayerByName(_dbContext.Player, player!).Result?.UserId.ToString();
+            // Resolve the optional player filter asynchronously. A supplied but unknown
+            // name must not silently turn into an unfiltered log search.
+            string? playerUserId = null;
+            if (!string.IsNullOrWhiteSpace(player))
+            {
+                var foundPlayer = await AdminLogRepository.FindPlayerByName(_dbContext.Player, player.Trim());
+                if (foundPlayer == null)
+                {
+                    Items = new List<AdminLog>();
+                    return;
+                }
+
+                playerUserId = foundPlayer.UserId.ToString();
+            }
+
+            PageIndex = Math.Max(0, PageIndex);
+            PerPage = Math.Clamp(PerPage, 1, 500);
+            if (FromDate > ToDate)
+                (FromDate, ToDate) = (ToDate, FromDate);
 
             //if you you leave the type filter as "" it just defaults to uknown as the type witch fucking breaks everything
             TypeSearch = CreateTypeFromValue(type);
