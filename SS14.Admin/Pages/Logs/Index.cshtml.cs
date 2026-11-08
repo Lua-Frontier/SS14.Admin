@@ -17,13 +17,16 @@ public class LogsIndexModel : PageModel
         public Dictionary<string, string?> AllRouteData { get; } = new();
 
         [BindProperty(SupportsGet = true)]
-        public DateTime FromDate { get; set; } = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
+        public DateTime? FromDate { get; set; } = DateTime.UtcNow.Subtract(TimeSpan.FromDays(1));
 
         [BindProperty(SupportsGet = true)]
-        public DateTime ToDate { get; set; } = DateTime.UtcNow;
+        public DateTime? ToDate { get; set; } = DateTime.UtcNow;
 
         [BindProperty(SupportsGet = true)]
         public OrderColumn Sort { get; set; } = OrderColumn.Date;
+
+        [BindProperty(SupportsGet = true)]
+        public bool SortDescending { get; set; } = true;
 
         [BindProperty(SupportsGet = true)]
         public int PageIndex { get; set; } = 0;
@@ -32,6 +35,9 @@ public class LogsIndexModel : PageModel
         public int PerPage { get; set; } = 100;
 
         public LogType? TypeSearch { get; set; } = null;
+        public string? TypeSearchText { get; set; }
+        public string? PlayerSearch { get; set; }
+        public int? RoundSearch { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public int? SeveritySearch { get; set; }
@@ -56,6 +62,7 @@ public class LogsIndexModel : PageModel
         public async Task OnGetAsync(
             string? daterange,
             string? search,
+            string? server,
             int? roundId,
             string? player,
             string? type,
@@ -63,6 +70,12 @@ public class LogsIndexModel : PageModel
             int? countselect
         )
         {
+            Search = search;
+            PlayerSearch = player;
+            RoundSearch = roundId;
+            TypeSearchText = type;
+            ServerSearch = server;
+
             //Converts "any" to null in order to correctly use FindAdminLogs()
             SeveritySearch = severity != -2 ? severity : null;
 
@@ -82,24 +95,27 @@ public class LogsIndexModel : PageModel
             }
 
             PageIndex = Math.Max(0, PageIndex);
-            PerPage = Math.Clamp(PerPage, 1, 500);
-            if (FromDate > ToDate)
+            if (FromDate.HasValue && ToDate.HasValue && FromDate > ToDate)
                 (FromDate, ToDate) = (ToDate, FromDate);
 
             //if you you leave the type filter as "" it just defaults to uknown as the type witch fucking breaks everything
             TypeSearch = CreateTypeFromValue(type);
 
-            if (countselect != null) PerPage = (int)countselect;
+            if (countselect != null) PerPage = countselect.Value;
+            PerPage = Math.Clamp(PerPage, 1, 500);
 
             //Add all search params to AllRouteData
-            AllRouteData.Add("fromDate", FromDate.ToString("yyyy-MM-dd"));
-            AllRouteData.Add("toDate", ToDate.ToString("yyyy-MM-dd"));
+            AllRouteData.Add("fromDate", FromDate?.ToString("yyyy-MM-dd"));
+            AllRouteData.Add("toDate", ToDate?.ToString("yyyy-MM-dd"));
             AllRouteData.Add("search", search);
+            AllRouteData.Add("server", server);
             AllRouteData.Add("roundId", roundId.ToString());
             AllRouteData.Add("player", player);
             AllRouteData.Add("type", type);
             AllRouteData.Add("severity", severity.ToString());
             AllRouteData.Add("countselect", countselect.ToString());
+            AllRouteData.Add("sort", Sort.ToString());
+            AllRouteData.Add("sortDescending", SortDescending.ToString().ToLowerInvariant());
 
             Items = await AdminLogRepository.FindAdminLogs(
                 _dbContext,
@@ -113,6 +129,7 @@ public class LogsIndexModel : PageModel
                 roundId,
                 SeveritySearch,
                 Sort,
+                SortDescending,
                 PerPage,
                 PageIndex * PerPage
             );

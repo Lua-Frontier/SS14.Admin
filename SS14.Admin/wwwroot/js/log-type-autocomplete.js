@@ -3,17 +3,6 @@
     const autocompleteOptions = document.getElementById('autocompleteOptions');
     let currentSelectedIndex = -1; // To keep track of the selected index
 
-    // Check if context parameter "type" exists and set the value if present
-    if (context.parameters.has("type")) {
-        x.value = context.parameters.get("type");
-    }
-
-    // Add change event listener to update context parameter "type" on input change
-    x.addEventListener('change', function() {
-        var currentValue = x.value;
-        context.updateQuery("type", currentValue);
-    });
-
     x.addEventListener('input', function () {
         const currentInput = this.value.toLowerCase();
         const filteredValues = Object.keys(AdminLogType).filter(
@@ -55,14 +44,10 @@
             const suggestions = autocompleteOptions.querySelectorAll('div');
             if (currentSelectedIndex !== -1 && currentSelectedIndex < suggestions.length) {
                 x.value = suggestions[currentSelectedIndex].textContent;
-                var currentValue = x.value;
-                context.updateQuery("type", currentValue);
                 hideAutocompleteOptions();
                 event.preventDefault(); // Prevent form submission
             } else if (x.value && suggestions.length > 0) {
                 x.value = suggestions[0].textContent;
-                var currentValue = x.value;
-                context.updateQuery("type", currentValue);
                 hideAutocompleteOptions();
                 event.preventDefault(); // Prevent form submission
             }
@@ -78,8 +63,6 @@
     autocompleteOptions.addEventListener('click', function (event) {
         if (event.target.tagName === 'DIV') {
             x.value = event.target.textContent;
-            var currentValue = x.value;
-            context.updateQuery("type", currentValue);
             hideAutocompleteOptions();
         }
     });

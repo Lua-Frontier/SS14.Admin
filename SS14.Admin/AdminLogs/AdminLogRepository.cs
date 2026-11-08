@@ -22,6 +22,7 @@ public static class AdminLogRepository
         int? roundId,
         int? severity,
         LogsIndexModel.OrderColumn sort,
+        bool sortDescending,
         int limit = 100, int offset = 0)
     {
         var fromDateValue = fromDate?.ToString("o", CultureInfo.InvariantCulture);
@@ -30,6 +31,13 @@ public static class AdminLogRepository
         var toDateExclusive = toDate?.Date.AddDays(1);
         var toDateValue = toDateExclusive?.ToString("o", CultureInfo.InvariantCulture);
         var typeInt = type.HasValue ? Convert.ToInt32(type).ToString() : null;
+        var serverNameValue = serverName;
+        var serverPredicate = "s.name = # AND";
+        if (serverName != null && context is PostgresServerDbContext)
+        {
+            serverNameValue = $"%{serverName.Trim()}%";
+            serverPredicate = "s.name ILIKE # AND";
+        }
 
         var values = new List<object>();
         if (fromDateValue != null && toDateValue != null)
@@ -39,7 +47,7 @@ public static class AdminLogRepository
         }
 
         if (playerUserId != null) values.Add(Guid.Parse(playerUserId));
-        if (serverName != null) values.Add(serverName);
+        if (serverNameValue != null) values.Add(serverNameValue);
         if (typeInt != null) values.Add(typeInt);
         if (search != null) values.Add(search);
         if (roundId.HasValue) values.Add(roundId);
@@ -49,28 +57,29 @@ public static class AdminLogRepository
         values.Add(limit.ToString());
         values.Add(offset.ToString());
 
-        var sortStatement = sort switch
+        var sortColumn = sort switch
         {
             LogsIndexModel.OrderColumn.Date => "a.date",
             LogsIndexModel.OrderColumn.Impact => "a.impact",
             _ => throw new ArgumentOutOfRangeException(nameof(sort), sort, "Unknown admin log sort column")
         };
+        var sortDirection = sortDescending ? "DESC" : "ASC";
 
         var query = $@"
         SELECT a.admin_log_id, a.date, a.impact, a.json, a.message, a.type, r.round_id, s.server_id, s.name FROM admin_log AS a
             INNER JOIN round AS r ON a.round_id = r.round_id
             INNER JOIN server AS s ON r.server_id = s.server_id
-            {(playerUserId != null ? "INNER JOIN admin_log_player AS p ON p.log_id = a.admin_log_id" : "")}
+            {(playerUserId != null ? "INNER JOIN admin_log_player AS p ON p.round_id = a.round_id AND p.log_id = a.admin_log_id" : "")}
             WHERE
                 {(fromDateValue != null && toDateValue != null ? "a.date >= #::timestamp with time zone AND a.date < #::timestamp with time zone AND" : "")}
                 {(playerUserId != null ? "p.player_user_id = # AND" : "")}
-                {(serverName != null ? "s.name = # AND" : "")}
+                {(serverNameValue != null ? serverPredicate : "")}
                 {(typeInt != null ? "a.type = #::integer AND" : "")}
                 {(search != null ? $"{TextSearchForContext(context)} AND" : "")}
                 {(roundId != null ? "r.round_id = #::integer AND" : "")}
                 {(severity != null ? "a.impact = #::integer AND" : "")}
                 TRUE
-            ORDER BY {sortStatement} DESC
+            ORDER BY {sortColumn} {sortDirection}
             LIMIT #::bigint OFFSET #::bigint
         ";
 

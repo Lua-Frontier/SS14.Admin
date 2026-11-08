@@ -17,6 +17,19 @@
   <data name="Date from - to" xml:space="preserve"><value>Дата от — до</value></data>
   <data name="Text Search" xml:space="preserve"><value>Поиск по тексту</value></data>
   <data name="Search" xml:space="preserve"><value>Поиск</value></data>
+  <data name="Search logs" xml:space="preserve"><value>Найти логи</value></data>
+  <data name="Search across rounds, players, types, and messages." xml:space="preserve"><value>Фильтруйте записи по раунду, игроку, типу и тексту сообщения.</value></data>
+  <data name="Search messages…" xml:space="preserve"><value>Поиск по сообщениям…</value></data>
+  <data name="Search uses PostgreSQL full-text matching." xml:space="preserve"><value>Поиск учитывает словоформы и совпадения по тексту.</value></data>
+  <data name="Any date" xml:space="preserve"><value>Любая дата</value></data>
+  <data name="Clear date range" xml:space="preserve"><value>Очистить период</value></data>
+  <data name="Choose a start and end date." xml:space="preserve"><value>Выберите начальную и конечную дату.</value></data>
+  <data name="Reset filters" xml:space="preserve"><value>Сбросить фильтры</value></data>
+  <data name="results on this page" xml:space="preserve"><value>записей на этой странице</value></data>
+  <data name="Low" xml:space="preserve"><value>Низкая</value></data>
+  <data name="Medium" xml:space="preserve"><value>Средняя</value></data>
+  <data name="High" xml:space="preserve"><value>Высокая</value></data>
+  <data name="Extreme" xml:space="preserve"><value>Критическая</value></data>
   <data name="Searching logs…" xml:space="preserve"><value>Ищем логи…</value></data>
   <data name="Server" xml:space="preserve"><value>Сервер</value></data>
   <data name="Any" xml:space="preserve"><value>Любое</value></data>

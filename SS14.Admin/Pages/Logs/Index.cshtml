@@ -11,6 +11,7 @@
     var nextDisabled = (Model.Items.Count == 0) ? "disabled" : "";
     var nextPageIdx = Model.PageIndex + 1;
     var prevPageIdx = Model.PageIndex == 1 ? null : (int?) Model.PageIndex - 1;
+    var selectedSeverity = Model.SeveritySearch ?? -2;
 }
 @section Styles {
     <link href="@Url.Content("~/css/logs.css")" rel="stylesheet" type="text/css"/>
@@ -21,60 +22,120 @@
     <span>@Localizer["Searching logs…"]</span>
 </div>
 
-<data-grid>
-    <data-grid-filter class="flex-row">
-        <div class="form-group" style="display: inline-block; align-items: center;">
-            <div style="display: inline-block">
-                <label for="datePicker">@Localizer["Date Range"]:<button id="litepicker-close" class="btn btn-sm"><i class="fas fa-times"></i></button></label>
-                <input class="form-control" name="daterange" id="datePicker" type="text" value="@(Model.FromDate)" placeholder="@(Localizer["Date from - to"])"/>
+<section class="logs-page">
+    <form id="logs-search-form" class="logs-filter-panel" method="get" asp-page="./Index">
+        <div class="logs-panel-heading">
+            <div>
+                <h1>@Localizer["Admin Logs"]</h1>
+                <p>@Localizer["Search across rounds, players, types, and messages."]</p>
+            </div>
+            <button type="submit" class="btn btn-primary logs-submit">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                @Localizer["Search logs"]
+            </button>
+        </div>
+        <div class="logs-filter-grid">
+            <div class="logs-field logs-field-wide">
+                <label for="search">@Localizer["Text Search"]</label>
+                <div class="logs-input-with-icon">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input name="search" class="form-control" id="search" type="search" value="@Model.Search" placeholder="@Localizer["Search messages…"]" autocomplete="off" />
+                </div>
+                <small>@Localizer["Search uses PostgreSQL full-text matching."]</small>
+            </div>
+            <div class="logs-field">
+                <label for="datePicker">@Localizer["Date Range"]</label>
+                <div class="logs-date-control">
+                    <input class="form-control" id="datePicker" type="text" readonly placeholder="@Localizer["Any date"]" aria-describedby="datePickerHint" />
+                    <button id="litepicker-close" class="btn btn-outline-secondary" type="button" aria-label="@Localizer["Clear date range"]" title="@Localizer["Clear date range"]"><i class="fas fa-times" aria-hidden="true"></i></button>
+                </div>
+                <small id="datePickerHint">@Localizer["Choose a start and end date."]</small>
+            </div>
+            <div class="logs-field">
+                <label for="player">@Localizer["Player"]</label>
+                <input id="player" name="player" class="form-control" type="search" value="@Model.PlayerSearch" placeholder="@Localizer["All Players"]" autocomplete="off" />
+            </div>
+            <div class="logs-field">
+                <label for="roundId">@Localizer["Round"]</label>
+                <input id="roundId" name="roundId" class="form-control" type="number" min="1" value="@Model.RoundSearch" placeholder="@Localizer["Any"]" />
+            </div>
+            <div class="logs-field">
+                <label for="server">@Localizer["Server"]</label>
+                <input id="server" name="server" class="form-control" type="search" value="@Model.ServerSearch" placeholder="@Localizer["Any"]" autocomplete="off" />
+            </div>
+            <div class="logs-field" id="autocomplete-container">
+                <label for="logTypeInput">@Localizer["Type"]</label>
+                <input id="logTypeInput" name="type" class="form-control" type="search" value="@Model.TypeSearchText" placeholder="@Localizer["Any"]" autocomplete="off" />
+                <div id="autocompleteOptions"></div>
+            </div>
+            <div class="logs-field">
+                <label for="severitySelect">@Localizer["Severity"]</label>
+                <select class="form-select" name="severity" id="severitySelect">
+                    @foreach (var option in Model.SeverityOptions)
+                    {
+                        if (selectedSeverity == option.Key)
+                        {
+                            <option class="@option.Value" value="@option.Key" selected>@Localizer[option.Value]</option>
+                        }
+                        else
+                        {
+                            <option class="@option.Value" value="@option.Key">@Localizer[option.Value]</option>
+                        }
+                    }
+                </select>
             </div>
         </div>
-        <div class="form-group">
-            <label for="search">@Localizer["Text Search"]</label>
-            <input name="search" class="form-control" id="search" type="text" placeholder="@(Localizer["Search"])"/>
+        <input type="hidden" id="fromDate" name="fromDate" value="@Model.FromDate?.ToString("yyyy-MM-dd")" />
+        <input type="hidden" id="toDate" name="toDate" value="@Model.ToDate?.ToString("yyyy-MM-dd")" />
+        <input type="hidden" name="sort" value="@Model.Sort" />
+        <input type="hidden" name="sortDescending" value="@Model.SortDescending.ToString().ToLowerInvariant()" />
+        <input type="hidden" name="countselect" value="@Model.PerPage" />
+        <div class="logs-filter-actions">
+            <a asp-page="./Index" class="logs-reset">@Localizer["Reset filters"]</a>
+            <span>@Model.Items.Count @Localizer["results on this page"]</span>
         </div>
-        <div class="form-group">
-            <label for="server">@Localizer["Server"]</label>
-            <input id="server" name="server" class="form-control" type="text" placeholder="@(Localizer["Any"])"/>
-        </div>
-        <div class="form-group">
-            <label for="roundId">@Localizer["Round"]</label>
-            <input id="roundId" name="roundId" class="form-control" type="number" placeholder="@(Localizer["Any"])"/>
-        </div>
-        <div class="form-group">
-            <label for="player">@Localizer["Player"]</label>
-            <input id="player" name="player" class="form-control" type="text" placeholder="@(Localizer["All Players"])"/>
-        </div>
-        <div class="form-group" id="autocomplete-container">
-            <label for="logTypeInput">@Localizer["Type"]</label>
-            <input id="logTypeInput" name="type" class="form-control" type="text" placeholder="@(Localizer["Any"])"/>
-            <div id="autocompleteOptions"></div>
-        </div>
-        <div class="form-group">
-            <label for="severitySelect">@Localizer["Severity"]</label>
-            <select class="form-control" name="severity" id="severitySelect">
-                @foreach (var option in Model.SeverityOptions)
-                {
-                    if (Model.SeveritySearch == option.Key)
-                    {
-                        <option class="@option.Value" value="@option.Key" selected>@option.Value</option>
-                    }
-                    else
-                    {
-                        <option class="@option.Value" value="@option.Key">@option.Value</option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="flex-seperator"></div>
-    </data-grid-filter>
+    </form>
+
+    <data-grid class="logs-results">
     <table class="results-table table table-striped table-hover">
         <thead>
         <tr>
             <th>@Localizer["Round Id"]</th>
             <th>@Localizer["Server"]</th>
-            <th class="text-center">@Localizer["Severity"]</th>
-            <th>@Localizer["Date"]</th>
+            <th class="text-center" aria-sort="@(Model.Sort == LogsIndexModel.OrderColumn.Impact ? (Model.SortDescending ? "descending" : "ascending") : "none")">
+                <a asp-page="./Index"
+                   asp-all-route-data="@Model.AllRouteData.ShallowClone()"
+                   asp-route-sort="Impact"
+                   asp-route-sortDescending="@(Model.Sort == LogsIndexModel.OrderColumn.Impact ? !Model.SortDescending : true)"
+                   asp-route-pageIndex="0">
+                    @Localizer["Severity"]
+                    @if (Model.Sort == LogsIndexModel.OrderColumn.Impact)
+                    {
+                        <i class="fas @(Model.SortDescending ? "fa-sort-down" : "fa-sort-up")" aria-hidden="true"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-sort" aria-hidden="true"></i>
+                    }
+                </a>
+            </th>
+            <th aria-sort="@(Model.Sort == LogsIndexModel.OrderColumn.Date ? (Model.SortDescending ? "descending" : "ascending") : "none")">
+                <a asp-page="./Index"
+                   asp-all-route-data="@Model.AllRouteData.ShallowClone()"
+                   asp-route-sort="Date"
+                   asp-route-sortDescending="@(Model.Sort == LogsIndexModel.OrderColumn.Date ? !Model.SortDescending : true)"
+                   asp-route-pageIndex="0">
+                    @Localizer["Date"]
+                    @if (Model.Sort == LogsIndexModel.OrderColumn.Date)
+                    {
+                        <i class="fas @(Model.SortDescending ? "fa-sort-down" : "fa-sort-up")" aria-hidden="true"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-sort" aria-hidden="true"></i>
+                    }
+                </a>
+            </th>
             <th>@Localizer["Type"]</th>
             <th>@Localizer["Message"]</th>
         </tr>
@@ -151,6 +212,7 @@
         </data-grid-footer>
     }
 </data-grid>
+</section>
 
 <div class="side-panel-container">
     <div id="side-panel-overlay" class="side-panel-overlay hidden"></div>

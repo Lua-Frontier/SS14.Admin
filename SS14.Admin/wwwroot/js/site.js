@@ -9,6 +9,7 @@ const context = {
     update: () => location.assign('?' + context.parameters.toString()),
     updateQuery: function (key, value) {
         this.parameters.set(key, value);
+        this.parameters.delete(this.parameterNames.PAGE_INDEX);
         this.update();
     },
     parameterNames: {

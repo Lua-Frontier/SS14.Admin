@@ -24,11 +24,8 @@ class DatePicker {
                     picker.on('selected', () => {
                         const start = DateTime.fromJSDate(picker.getStartDate().dateInstance).toISODate();
                         const end = DateTime.fromJSDate(picker.getEndDate().dateInstance).toISODate();
-
-                        context.parameters.set(this.fromDateKey, start);
-                        context.parameters.set(this.toDateKey, end);
-                        context.parameters.delete(context.parameterNames.PAGE_INDEX);
-                        context.update();
+                        document.getElementById(this.fromDateKey).value = start;
+                        document.getElementById(this.toDateKey).value = end;
                     })
                 }
             });
@@ -41,20 +38,21 @@ class DatePicker {
         {
             this.pickerCloseButton.addEventListener('click', () => {
                 this.picker.clearSelection();
-                context.parameters.delete(this.fromDateKey);
-                context.parameters.delete(this.toDateKey);
-                context.parameters.delete(context.parameterNames.PAGE_INDEX);
-                context.update();
+                document.getElementById(this.fromDateKey).value = '';
+                document.getElementById(this.toDateKey).value = '';
+                this.pickerElement.value = '';
             });
         }
     }
 
     getDatePickerValue()
     {
-        if (!context.parameters.has(this.fromDateKey) || !context.parameters.has(this.toDateKey)) return null;
+        const fromValue = document.getElementById(this.fromDateKey)?.value;
+        const toValue = document.getElementById(this.toDateKey)?.value;
+        if (!fromValue || !toValue) return null;
 
-        const from = DateTime.fromISO(context.parameters.get(this.fromDateKey));
-        const to = DateTime.fromISO(context.parameters.get(this.toDateKey));
+        const from = DateTime.fromISO(fromValue);
+        const to = DateTime.fromISO(toValue);
 
         return from.toFormat(DatePicker.PICKER_DATE_FORMAT) + ' - ' + to.toFormat(DatePicker.PICKER_DATE_FORMAT);
     }
