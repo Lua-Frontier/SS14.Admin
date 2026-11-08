@@ -27,7 +27,6 @@
         <div class="logs-panel-heading">
             <div>
                 <h1>@Localizer["Admin Logs"]</h1>
-                <p>@Localizer["Search across rounds, players, types, and messages."]</p>
             </div>
             <button type="submit" class="btn btn-primary logs-submit">
                 <i class="fas fa-search" aria-hidden="true"></i>
@@ -41,7 +40,6 @@
                     <i class="fas fa-search" aria-hidden="true"></i>
                     <input name="search" class="form-control" id="search" type="search" value="@Model.Search" placeholder="@Localizer["Search messages…"]" autocomplete="off" />
                 </div>
-                <small>@Localizer["Search uses PostgreSQL full-text matching."]</small>
             </div>
             <div class="logs-field">
                 <label for="datePicker">@Localizer["Date Range"]</label>
@@ -49,7 +47,6 @@
                     <input class="form-control" id="datePicker" type="text" readonly placeholder="@Localizer["Any date"]" aria-describedby="datePickerHint" />
                     <button id="litepicker-close" class="btn btn-outline-secondary" type="button" aria-label="@Localizer["Clear date range"]" title="@Localizer["Clear date range"]"><i class="fas fa-times" aria-hidden="true"></i></button>
                 </div>
-                <small id="datePickerHint">@Localizer["Choose a start and end date."]</small>
             </div>
             <div class="logs-field">
                 <label for="player">@Localizer["Player"]</label>
@@ -147,7 +144,7 @@
                 <td>@entry.RoundId</td>
                 <td>@entry.Round?.Server?.Name</td>
                 <td class="text-center colored" style="--cell-color: var(@entry.Impact.CssColorVarName())">@entry.Impact.ToString()</td>
-                <td>@entry.Date</td>
+                <td><time class="local-log-time" datetime="@entry.Date.ToUniversalTime().ToString("O")">@entry.Date</time></td>
                 <td>@entry.Type</td>
                 <td>@entry.Message</td>
                 <template>

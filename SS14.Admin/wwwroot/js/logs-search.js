@@ -1,5 +1,25 @@
 const datePicker = new DatePicker('datePicker', 'litepicker-close');
 
+function formatLogTimesInBrowserZone() {
+    const formatter = new Intl.DateTimeFormat(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hourCycle: 'h23'
+    });
+
+    document.querySelectorAll('time.local-log-time[datetime]').forEach(element => {
+        const date = new Date(element.dateTime);
+        if (!Number.isNaN(date.getTime()))
+            element.textContent = formatter.format(date);
+    });
+}
+
+formatLogTimesInBrowserZone();
+
 $(document).ready(function() {
     const loading = document.getElementById('logs-loading');
     let navigationPending = false;
