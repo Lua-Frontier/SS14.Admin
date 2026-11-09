@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Globalization;
 using System.Net;
+using System.Security.Claims;
 using Content.Server.Database;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
@@ -146,6 +147,28 @@ namespace SS14.Admin
             if (!string.IsNullOrEmpty(pathBase))
             {
                 app.UsePathBase(pathBase);
+            }
+
+            // Explicit local-only design preview identity. Enabled only by an opt-in
+            // environment variable and only for loopback requests in Development.
+            if (env.IsDevelopment() && Configuration.GetValue<bool>("DeveloperPreview:Enabled"))
+            {
+                app.Use(async (context, next) =>
+                {
+                    if (context.Request.Path.StartsWithSegments("/Logs")
+                        && context.Request.Query.ContainsKey("developerPreview")
+                        && context.Connection.RemoteIpAddress is { } address
+                        && IPAddress.IsLoopback(address))
+                    {
+                        context.User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                        {
+                            new Claim("name", "Local design preview"),
+                            new Claim(ClaimTypes.Role, "ADMIN")
+                        }, "LocalDeveloperPreview"));
+                    }
+
+                    await next();
+                });
             }
 
             app.UseAuthentication();

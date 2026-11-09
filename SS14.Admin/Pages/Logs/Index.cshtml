@@ -14,7 +14,7 @@
     var selectedSeverity = Model.SeveritySearch ?? -2;
 }
 @section Styles {
-    <link href="@Url.Content("~/css/logs.css")" rel="stylesheet" type="text/css"/>
+    <link href="~/css/logs.css" rel="stylesheet" type="text/css" asp-append-version="true"/>
 }
 
 <div id="logs-loading" class="logs-loading" role="status" aria-live="polite" aria-hidden="true">
@@ -22,17 +22,37 @@
     <span>@Localizer["Searching logs…"]</span>
 </div>
 
-<section class="logs-page">
+<section class="logs-page" id="logs-workspace">
     <form id="logs-search-form" class="logs-filter-panel" method="get" asp-page="./Index">
+        @if (Model.DeveloperPreview)
+        {
+            <div class="logs-preview-banner"><i class="fas fa-flask" aria-hidden="true"></i><strong>DEVELOPER PREVIEW</strong><span>Sample records · search form actions stay local</span><a asp-page="./Index">Exit preview</a></div>
+            <input type="hidden" name="developerPreview" value="true" />
+        }
         <div class="logs-panel-heading">
-            <div>
+            <div class="logs-brand">
+                <span class="logs-brand-mark"><i class="fas fa-terminal" aria-hidden="true"></i></span>
+                <div>
                 <h1>@Localizer["Admin Logs"]</h1>
+                    <span class="logs-context">LIVE ARCHIVE <b>·</b> ROUND EVENTS</span>
+                </div>
             </div>
+            <div class="logs-heading-actions">
+            <button type="button" class="logs-design-toggle" id="logs-design-toggle" aria-pressed="false" title="Design developer mode">
+                <i class="fas fa-sliders-h" aria-hidden="true"></i><span>DESIGN</span>
+            </button>
             <button type="submit" class="btn btn-primary logs-submit">
                 <i class="fas fa-search" aria-hidden="true"></i>
-                @Localizer["Search logs"]
+                <span>@Localizer["Search logs"]</span>
             </button>
+            </div>
         </div>
+        <aside class="logs-design-tools" id="logs-design-tools" hidden aria-label="Design controls">
+            <span>DESIGN TOKENS</span>
+            <label>Palette <select id="logs-palette"><option value="command">Command</option><option value="amber">Amber</option><option value="mint">Mint</option></select></label>
+            <label>Density <select id="logs-density"><option value="compact">Compact</option><option value="comfortable">Comfortable</option></select></label>
+            <code>logs.css · local preview</code>
+        </aside>
         <div class="logs-filter-grid">
             <div class="logs-field logs-field-wide">
                 <label for="search">@Localizer["Text Search"]</label>
@@ -88,11 +108,12 @@
         <input type="hidden" name="sortDescending" value="@Model.SortDescending.ToString().ToLowerInvariant()" />
         <input type="hidden" name="countselect" value="@Model.PerPage" />
         <div class="logs-filter-actions">
-            <a asp-page="./Index" class="logs-reset">@Localizer["Reset filters"]</a>
+            <a asp-page="./Index" asp-route-developerPreview="@(Model.DeveloperPreview ? "true" : null)" class="logs-reset">@Localizer["Reset filters"]</a>
             <span>@Model.Items.Count @Localizer["results on this page"]</span>
         </div>
     </form>
 
+    <div class="logs-results-meta"><span><i class="fas fa-stream" aria-hidden="true"></i> EVENT STREAM</span><span>@Model.Items.Count @Localizer["results on this page"]</span></div>
     <data-grid class="logs-results">
     <table class="results-table table table-striped table-hover">
         <thead>
@@ -143,10 +164,10 @@
             <tr class="on-click data-log">
                 <td>@entry.RoundId</td>
                 <td>@entry.Round?.Server?.Name</td>
-                <td class="text-center colored" style="--cell-color: var(@entry.Impact.CssColorVarName())">@entry.Impact.ToString()</td>
+                <td class="text-center"><span class="log-impact log-impact-@entry.Impact.ToString().ToLowerInvariant()" style="--cell-color: var(@entry.Impact.CssColorVarName())">@entry.Impact.ToString()</span></td>
                 <td><time class="local-log-time" datetime="@entry.Date.ToUniversalTime().ToString("O")">@entry.Date</time></td>
-                <td>@entry.Type</td>
-                <td>@entry.Message</td>
+                <td><span class="log-type log-type-@entry.Type.ToString().ToLowerInvariant()">@entry.Type</span></td>
+                <td class="log-message">@Html.Raw(AdminLogMessageFormatter.Format(entry.Message, Model.GetPlayerNames(entry)))</td>
                 <template>
                     <div class="log-details-header flex-row" style="--cell-color: var(@entry.Impact.CssColorVarName())">
                         <h2>Details</h2>
@@ -157,7 +178,7 @@
                         <p>Round: <a href="#">@entry.RoundId</a></p>
                     </div>
                     <h3>Message:</h3>
-                    <p>@entry.Message</p>
+                    <p class="log-message">@Html.Raw(AdminLogMessageFormatter.Format(entry.Message, Model.GetPlayerNames(entry)))</p>
                     <hr class="line-inset">
                     <h4>Data:</h4>
                     <log-json json="entry.Json"></log-json>

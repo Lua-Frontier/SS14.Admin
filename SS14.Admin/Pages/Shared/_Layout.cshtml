@@ -6,6 +6,7 @@
     var signIn = SignInManager.GetSignInData(User);
     var darkMode = Context.Request.Cookies["darkMode"] == "true";
     var darkModeClass = darkMode ? "dark" : "light";
+    var logsLayoutClass = Context.Request.Path.StartsWithSegments("/Logs") ? "logs-layout" : "";
 }
 
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css">
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="@logsLayoutClass">
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar border-bottom box-shadow mb-3">
         <div class="container">

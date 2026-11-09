@@ -20,6 +20,38 @@ function formatLogTimesInBrowserZone() {
 
 formatLogTimesInBrowserZone();
 
+// Local design controls: experiment with page tokens without changing search state.
+(() => {
+    const workspace = document.getElementById('logs-workspace');
+    const toggle = document.getElementById('logs-design-toggle');
+    const tools = document.getElementById('logs-design-tools');
+    const palette = document.getElementById('logs-palette');
+    const density = document.getElementById('logs-density');
+    if (!workspace || !toggle || !tools) return;
+
+    const storedPalette = localStorage.getItem('logs-design-palette');
+    const storedDensity = localStorage.getItem('logs-design-density');
+    if (storedPalette) workspace.dataset.palette = storedPalette;
+    if (storedDensity) workspace.dataset.density = storedDensity;
+    if (palette) palette.value = storedPalette || 'command';
+    if (density) density.value = storedDensity || 'compact';
+
+    toggle.addEventListener('click', () => {
+        const active = toggle.getAttribute('aria-pressed') !== 'true';
+        toggle.setAttribute('aria-pressed', String(active));
+        tools.hidden = !active;
+        workspace.classList.toggle('logs-design-mode', active);
+    });
+    palette?.addEventListener('change', () => {
+        workspace.dataset.palette = palette.value;
+        localStorage.setItem('logs-design-palette', palette.value);
+    });
+    density?.addEventListener('change', () => {
+        workspace.dataset.density = density.value;
+        localStorage.setItem('logs-design-density', density.value);
+    });
+})();
+
 $(document).ready(function() {
     const loading = document.getElementById('logs-loading');
     let navigationPending = false;
